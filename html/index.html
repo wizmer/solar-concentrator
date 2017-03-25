@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+    <meta charset="utf-8"/>
+    <head>
+        <script src="https://d3js.org/d3.v3.js"></script>
+        <link rel="stylesheet" href="css/d3.slider.css" />  
+        <h1>Hello world</h1>
+        <style>
+
+         body {
+             font-family: Verdana,Arial,sans-serif;
+         }
+
+         h2 {
+    	       font-size: 1.2em;
+    	       margin: 60px 0 5px 0;
+         }
+
+	       .wrapper div {
+		         margin: 35px 0;
+	       }
+
+         .wrapper {
+             width: 800px;
+             margin-left: auto;
+             margin-right: auto;
+         }
+
+         .d3-slider {
+    	       width: 400px;
+             margin: 50px;
+         }
+
+         .axis path,
+         .axis line {
+             fill: none;
+             stroke: #000;
+             shape-rendering: crispEdges;
+         }
+
+         .dot {
+             stroke: #000;
+         }
+
+         .tooltip {
+             position: absolute;
+             width: 200px;
+             height: 28px;
+             pointer-events: none;
+         }
+        </style>
+    </head>
+    <body>
+        <div id="body">
+            <div id="footer">
+                Collision Detection
+                <div class="hint">move the mouse to repel nodes</div>
+            </div>
+        </div>
+        <h2>Latitude</h2>
+        <div id="slider_latitude"></div>
+        <h2>Longitude</h2>
+        <div id="slider_longitude"></div>
+        <script type="text/javascript" src="d3.slider.js" ></script>
+        <script type="text/javascript" src="sun_motion.js" ></script>
+        <script src="main.js"></script>
+    </body>
+</html>
