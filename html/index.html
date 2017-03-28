@@ -3,12 +3,13 @@
     <meta charset="utf-8"/>
     <head>
         <script src="https://d3js.org/d3.v3.js"></script>
-        <link rel="stylesheet" href="css/d3.slider.css" />  
-        <h1>Hello world</h1>
+        <link rel="stylesheet" href="css/d3.slider.css" />
         <style>
 
          body {
              font-family: Verdana,Arial,sans-serif;
+             max-width: 1000px;
+             margin: auto;
          }
 
          h2 {
@@ -21,14 +22,15 @@
 	       }
 
          .wrapper {
-             width: 800px;
+             width: 400px;
              margin-left: auto;
              margin-right: auto;
          }
 
          .d3-slider {
-    	       width: 400px;
-             margin: 50px;
+    	       width: 300px;
+             margin: 20px;
+             margin-bottom: 50px;
          }
 
          .axis path,
@@ -48,19 +50,80 @@
              height: 28px;
              pointer-events: none;
          }
+
+         .container-sliders {
+             display: flex;
+         }
+
+         #container-inputs {
+             border: solid 2px grey;
+             padding: 10px 30px;
+             border-radius: 5px;
+             max-width: 800px;
+         }
+
+         #container-graph {
+
+         }
+
+         input {
+             margin: 8px;
+             font-size: 18px;
+             padding: 10px;
+             border-radius: 5px;
+         }
+
+         .coord_name {
+             font-size: 20px;
+             font-weight: bold;
+             padding-left: 10px;
+         }
+
+         a:visited {
+             color: blue;
+         }
+
+         .plot {
+
+         }
+
+         /* D3.JS */
+         .axis-label {
+             font-size: 20px;
+         }
+         #container-flex {
+             display: flex;
+         }
+
         </style>
     </head>
     <body>
-        <div id="body">
-            <div id="footer">
-                Collision Detection
-                <div class="hint">move the mouse to repel nodes</div>
-            </div>
+        <div id="container-flex">
+            <div class="plot" id="container-air-mass-plot"></div>
+            <div class="plot" id="container-intensity-plot"></div>
         </div>
-        <h2>Latitude</h2>
-        <div id="slider_latitude"></div>
-        <h2>Longitude</h2>
-        <div id="slider_longitude"></div>
+        <div id="container-inputs">
+            <div id="container-sliders">
+                <div>
+                    <div class="coord_name">Latitude: <span id="latitude-number"></span></div>
+                    <div id="slider_latitude"></div>
+                </div>
+
+                <div>
+                    <div class="coord_name">Longitude: <span id="longitude-number"></span></div>
+                    <div id="slider_longitude"></div>
+                </div>
+            </div>
+
+            <form>
+                Date: <input type="date"  name="date" id="date" value="" style="margin-right:50px">
+            </form>
+            <form>
+                Time zone offset to UTC: <input style="width:40px"type="number" step="0.5" name="utc-offset-number" id="utc-offset-number" value="0">
+            </form>
+            <p>You can compare the results with <a href="https://www.esrl.noaa.gov/gmd/grad/solcalc/azel.html" target="_blank">NOAA's solar position calculator</a></p>
+        </div>
+        <div class="plot" id="container-elevation-plot"></div>
         <script type="text/javascript" src="d3.slider.js" ></script>
         <script type="text/javascript" src="sun_motion.js" ></script>
         <script src="main.js"></script>

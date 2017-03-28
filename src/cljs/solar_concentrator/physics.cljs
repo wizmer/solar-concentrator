@@ -1,5 +1,5 @@
 (ns solar-concentrator.physics
-  ;; (:require [clojure.math.numeric-tower :refer [sqrt sin cos expt]])
+  (:require [cljs-time.core :refer [year month day]])
   )
 
 
@@ -15,19 +15,22 @@
   [angle]
   (* angle (/ 180 (.-PI js/Math))))
 
+(defn to-radians
+  [angle]
+  (* angle (/ (.-PI js/Math) 180)))
+
 (defn get-data
   [coordinates]
-  (let* [year 2017
-         month 4
-         day 20
+
+  (let* [offset (* 60 (coordinates :utc-offset))
          minutes (.range js/d3 0 (* 24 60) 15)
-         rad (.-PI js/Math)
+         date (coordinates :date)
          times (map (fn [minute] (js/Date.
-                                  year
-                                  month
-                                  day
-                                  (quot minute 60)
-                                  (rem minute 60)
+                                  (year date)
+                                  (month date)
+                                  (day date)
+                                  (quot (+ minute offset) 60)
+                                  (rem (+ minute offset) 60)
                                   0 0))
                     minutes)
 
@@ -45,3 +48,31 @@
          y (vec (map compute-altitude-in-degrees times))]
 
     (doall (map vector x y))))
+
+
+(defn cos [angle] (.cos js/Math angle))
+(defn air-mass
+  [elevation-angle]
+  ;; # According to : https://en.wikipedia.org/wiki/Air_mass_(solar_energy)
+  (let [incidence-angle (to-radians (- 90 elevation-angle))
+        radius_earth_km 6371
+        atm_thickness_km 9
+        ratio (/ radius_earth_km atm_thickness_km)]
+
+    (- (.sqrt js/Math (+ (.pow js/Math (* ratio (cos incidence-angle)) 2)
+                         (+ (* 2 ratio) 1)))
+       (* ratio (cos incidence-angle)))))
+
+(defn get-air-mass-data
+  []
+  (doall (map #(vector % (air-mass %)) (range 1 90 0.2)))
+  )
+
+(defn intensity
+  [air-mass]
+  (let [i-max 1353]
+    (* i-max (.pow js/Math 0.7 (.pow js/Math air-mass 0.678)))))
+
+(defn get-solar-intensity-data
+  []
+  (doall (map #(vector % (intensity (air-mass %))) (range 1 90 0.2))))

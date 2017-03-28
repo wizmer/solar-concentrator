@@ -9,7 +9,9 @@
                  [pandeiro/boot-http "0.7.6"]
                  [adzerk/boot-reload "0.5.1"]
                  [adzerk/boot-cljs-repl "0.3.0"]       ;; add bREPL
+                 [quil "2.6.0"]
                  [com.cemerick/piggieback "0.2.1"]     ;; needed by bREPL
+                 [com.andrewmcveigh/cljs-time "0.4.0"]
                  [weasel "0.7.0"]                      ;; needed by bREPL
                  [org.clojure/tools.nrepl "0.2.12"]    ;; needed by bREPL
                  [org.clojars.magomimmo/domina "2.0.0-SNAPSHOT"]
