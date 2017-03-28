@@ -1,0 +1,5 @@
+* Solar power simulator
+** Installation
+   'boot dev' should work but it does note
+   For the time being you should type the following command in the root dir:
+   boot serve -d target watch reload cljs-repl cljs target
