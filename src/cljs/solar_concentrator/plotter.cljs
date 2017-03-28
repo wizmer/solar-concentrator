@@ -206,7 +206,7 @@
         (.attr "cx" (fn [d i] (x (d 0))))
         (.attr "cy" (fn [d i] (y (max 0 (d 1)))))
         (.attr "r" 2))
-    (add-axis-labels! main "Sun power (Watt)" "Sun elevation (degrees)")))
+    (add-axis-labels! main "Sun elevation (degrees)" "Sun power (Watt)")))
 
 (defn update-plot
   [data]
