@@ -15,8 +15,10 @@
 (let [elevation-data (solar-concentrator.physics/get-data @coordinates)
       air-mass-data  (solar-concentrator.physics/get-air-mass-data)
       intensity-data (solar-concentrator.physics/get-solar-intensity-data)]
-  (solar-concentrator.plotter/plot elevation-data)
   (solar-concentrator.plotter/plot-air-mass-data air-mass-data)
   (solar-concentrator.plotter/plot-intensity-data intensity-data)
+  (solar-concentrator.plotter/plot elevation-data)
+  (solar-concentrator.sliders/recompute-and-refresh-plots! @coordinates)
+
   )
 

@@ -95,6 +95,10 @@
              display: flex;
          }
 
+         #container-elevation-plot {
+             float: left;
+         }
+
         </style>
     </head>
     <body>
@@ -124,6 +128,7 @@
             <p>You can compare the results with <a href="https://www.esrl.noaa.gov/gmd/grad/solcalc/azel.html" target="_blank">NOAA's solar position calculator</a></p>
         </div>
         <div class="plot" id="container-elevation-plot"></div>
+        <p>Integrated on the day, this makes a power of: <span id="daily-power"></span></p>
         <script type="text/javascript" src="d3.slider.js" ></script>
         <script type="text/javascript" src="sun_motion.js" ></script>
         <script src="main.js"></script>

@@ -76,3 +76,13 @@
 (defn get-solar-intensity-data
   []
   (doall (map #(vector % (intensity (air-mass %))) (range 1 90 0.2))))
+
+(defn get-daily-power
+  "Compute the solar energy integrated on one day"
+  [data]
+  (let [time-steps (keys data)
+        step (- (second time-steps) (first time-steps))]
+    (* step
+       (apply + (map #(intensity (air-mass %)) (vals data))))) ;; Integral of intensity on the entire day
+  )
+

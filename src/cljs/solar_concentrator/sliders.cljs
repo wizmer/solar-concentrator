@@ -23,17 +23,25 @@
   (set-text! (by-id "longitude-number") (gstring/format "%.1f" (coordinates :longitude)))
   )
 
+(defn recompute-and-refresh-plots!
+  "Recompute all physics variables and refresh plot"
+  [coordinates]
+  (let [data (solar-concentrator.physics/get-data coordinates)
+        power (solar-concentrator.physics/get-daily-power data)]
+    (set-text! (by-id "daily-power") (gstring/format "%.0f" power))
+    (solar-concentrator.plotter/update-plot data)))
+
 (defn on-slide! [coordinates coord-name evt value]
   "Callback called when sliders are moved"
   (new-coord! coordinates coord-name value)
   (refresh-coordinates! @coordinates)
-  (solar-concentrator.plotter/update-plot (solar-concentrator.physics/get-data @coordinates)))
+  (recompute-and-refresh-plots! @coordinates))
 
 (defn on-date-changed! [coordinates]
   (let [date-str (domina.core/value (by-id "date"))
         date (parse (formatters :date) date-str)]
     (swap! coordinates #(assoc % :date date) )
-    (solar-concentrator.plotter/update-plot (solar-concentrator.physics/get-data @coordinates))
+    (recompute-and-refresh-plots! @coordinates)
     ))
 
 (defn on-utc-offset-changed! [coordinates]
@@ -41,7 +49,7 @@
   (let [utc-offset (domina.core/value (by-id "utc-offset-number"))]
     (println utc-offset)
     (swap! coordinates #(assoc % :utc-offset utc-offset) )
-    (solar-concentrator.plotter/update-plot (solar-concentrator.physics/get-data @coordinates))
+    (recompute-and-refresh-plots! @coordinates)
     ))
 
 (defn populate
