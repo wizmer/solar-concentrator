@@ -3,6 +3,8 @@
 (def margin {:top 20 :right 15 :bottom 20 :left 100})
 (def width (- 460 (margin :left) (margin :right)))
 (def height (- 300 (margin :top) (margin :bottom)))
+(def plot-range {:x #js [0 width] :y #js [height 0]})
+
 
 (defn add-axis-labels!
   [element label-x label-y]
@@ -22,143 +24,19 @@
       (.attr "class" "axis-label")
       (.text label-y)))
 
+
 (defn plot
-  [data]
+  [data domain range label]
   (let* [x (-> js/d3
                (.-scale)
                (.linear)
-               (.domain #js [0 24])
-               (.range #js [0 width]))
-         y (-> (.-scale js/d3)
-               (.linear)
-               (.domain #js [0 90])
-               (.range #js [height 0]))
-
-         chart (-> js/d3
-                   (.select "#container-elevation-plot")
-                   (.append "svg:svg")
-                   (.attr "width" (+ width (margin :right) (margin :left)))
-                   (.attr "height" (+ width (margin :top) (margin :bottom)))
-                   (.attr "class" "chart"))
-
-         main (-> (.append chart "g")
-                  (.attr "transform"
-                         (str "translate(" (margin :left) "," (margin :top ) ")"))
-                  (.attr "width" width)
-                  (.attr "height" height)
-                  (.attr "class" "main"))
-
-         x-axis (-> (.-svg js/d3)
-                    (.axis)
-                    (.scale x)
-                    (.orient "bottom"))
-
-         y-axis (-> (.-svg js/d3)
-                    (.axis)
-                    (.scale y)
-                    (.orient "left"))
-         ]
-
-    (-> main
-        (.append "g")
-        (.attr "transform"
-               (str "translate(" 0 "," height ")"))
-        (.attr "class" "main axis date")
-        (.call x-axis))
-
-
-    (-> (.append main "g")
-        (.attr "transform" "translate(0,0)")
-        (.attr "class" "main axis date")
-        (.call y-axis))
-
-    (-> (.append main "svg:g")
-        (.selectAll "scatter-dots")
-        (.data (apply array data))
-        (.enter)
-        (.append "svg:circle")
-        (.attr "cx" (fn [d i] (x (d 0))))
-        (.attr "cy" (fn [d i] (y (max 0 (d 1)))))
-        (.attr "r" 2))
-    (add-axis-labels! main "Time (h)" "Sun elevation (degrees)")
-))
-
-
-
-(defn plot-air-mass-data
-  [data]
-  (let* [x (-> js/d3
-               (.-scale)
-               (.linear)
-               (.domain #js [0 90])
-               (.range #js [0 width]))
+               (.domain (:x domain))
+               (.range  (:x range)))
 
          y (-> (.-scale js/d3)
                (.linear)
-               (.domain #js [0 40])
-               (.range #js [height 0]))
-
-         chart (-> js/d3
-                   (.select "#container-air-mass-plot")
-                   (.append "svg:svg")
-                   (.attr "width" (+ width (margin :right) (margin :left)))
-                   (.attr "height" (+ width (margin :top) (margin :bottom)))
-                   (.attr "class" "chart"))
-
-         main (-> (.append chart "g")
-                  (.attr "transform"
-                         (str "translate(" (margin :left) "," (margin :top ) ")"))
-                  (.attr "width" width)
-                  (.attr "height" height)
-                  (.attr "class" "main"))
-
-         x-axis (-> (.-svg js/d3)
-                    (.axis)
-                    (.scale x)
-                    (.orient "bottom"))
-
-         y-axis (-> (.-svg js/d3)
-                    (.axis)
-                    (.scale y)
-                    (.orient "left"))
-         ]
-
-    (-> main
-        (.append "g")
-        (.attr "transform"
-               (str "translate(" 0 "," height ")"))
-        (.attr "class" "main axis date")
-        (.call x-axis))
-
-
-    (-> (.append main "g")
-        (.attr "transform" "translate(0,0)")
-        (.attr "class" "main axis date")
-        (.call y-axis))
-
-    (-> (.append main "svg:g")
-        (.selectAll "scatter-dots")
-        (.data (apply array data))
-        (.enter)
-        (.append "svg:circle")
-        (.attr "cx" (fn [d i] (x (d 0))))
-        (.attr "cy" (fn [d i] (y (max 0 (d 1)))))
-        (.attr "r" 2))
-  (add-axis-labels! main "Sun elevation (degrees)" "Air mass")))
-
-
-(defn plot-intensity-data
-  [data]
-  (let* [x (-> js/d3
-               (.-scale)
-               (.linear)
-               (.domain #js [0 90])
-               (.range #js [0 width]))
-
-         y (-> (.-scale js/d3)
-               (.linear)
-               (.domain #js [0 1000])
-               (.range #js [height 0]))
+               (.domain (:y domain))
+               (.range (:y range)))
 
          chart (-> js/d3
                    (.select "#container-intensity-plot")
@@ -206,7 +84,31 @@
         (.attr "cx" (fn [d i] (x (d 0))))
         (.attr "cy" (fn [d i] (y (max 0 (d 1)))))
         (.attr "r" 2))
-    (add-axis-labels! main "Sun elevation (degrees)" "Sun power (Watt)")))
+    (add-axis-labels! main (:x label) (:y label))))
+
+
+(defn plot-elevation-data
+  [data]
+  (plot data
+        {:x #js [0 24] :y #js [0 90]} ;; domain
+        plot-range
+        {:x "Time (h)" :y "Sun elevation (degrees)"}) ;; labels
+
+
+(defn plot-air-mass-data
+  [data]
+  (plot data
+        {:x #js [0 90] :y #js [0 40]}  ;; domain
+        plot-range
+        {:x "Sun elevation (degrees)" :y "Air mass"}) ;; labels
+
+(defn plot-intensity-data
+  [data]
+  (plot data
+        {:x #js [0 90] :y #js [0 1000]}  ;; domain
+        plot-range
+        {:x "Sun elevation (degrees)" :y "Sun power (Watt)"}) ;; labels
+
 
 (defn update-plot
   [data]
