@@ -64,17 +64,14 @@
     (-> js/d3
         (.select (str "#slider_" (name coord-name)))
         (.call (-> js/d3
-                   (.slider)
-                   (.axis true)
-                   (.min (range 0))
-                   (.max (range 1))
-                   (.step 1)
+                   (.slider (range 0) (range 1))
+                   (.value 0)
+                   (.axis  (-> (.-svg js/d3)
+                              (.axis)
+                              (.orient "bottom")
+                              (.ticks 7)))
                    (.on "slide" (partial on-slide! coordinates coord-name))))))
 
-  (-> (.-svg js/d3)
-      (.axis)
-      (.orient "top")
-      (.ticks 8))
 
   (listen! (by-id "utc-offset-number") :input (fn []
                                                 (on-utc-offset-changed! coordinates)))

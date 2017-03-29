@@ -26,7 +26,7 @@
 
 
 (defn plot
-  [data domain range label]
+  [container data domain range label]
   (let* [x (-> js/d3
                (.-scale)
                (.linear)
@@ -39,7 +39,7 @@
                (.range (:y range)))
 
          chart (-> js/d3
-                   (.select "#container-intensity-plot")
+                   (.select container)
                    (.append "svg:svg")
                    (.attr "width" (+ width (margin :right) (margin :left)))
                    (.attr "height" (+ width (margin :top) (margin :bottom)))
@@ -89,26 +89,30 @@
 
 (defn plot-elevation-data
   [data]
-  (plot data
+  (plot "#container-elevation-plot"
+        data
         {:x #js [0 24] :y #js [0 90]} ;; domain
         plot-range
         {:x "Time (h)" :y "Sun elevation (degrees)"}) ;; labels
-
+)
 
 (defn plot-air-mass-data
   [data]
-  (plot data
+  (plot "#container-air-mass-plot"
+        data
         {:x #js [0 90] :y #js [0 40]}  ;; domain
         plot-range
         {:x "Sun elevation (degrees)" :y "Air mass"}) ;; labels
+  )
 
 (defn plot-intensity-data
   [data]
-  (plot data
+  (plot "#container-intensity-plot"
+        data
         {:x #js [0 90] :y #js [0 1000]}  ;; domain
         plot-range
         {:x "Sun elevation (degrees)" :y "Sun power (Watt)"}) ;; labels
-
+  )
 
 (defn update-plot
   [data]
@@ -127,10 +131,12 @@
                   (.data (apply array data))
                   (.transition)
                   (.duration 1000)
-                  (.each "start" (fn [] (this-as this
+
+          (.each "start" (fn [] (this-as this
                                           (-> (.select js/d3 this)
                                               (.attr "cx" #(x (%1 0)))
                                               (.attr "cy" #(y (max 0 (%1 1))))
                                               (.attr "r" 2))
                                           ))))
         ]))
+

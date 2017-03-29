@@ -5,13 +5,11 @@
     BSD license: http://opensource.org/licenses/BSD-3-Clause
 */
 
-d3.slider = function module() {
+d3.slider = function module(min, max) {
   "use strict";
 
   // Public variables width default settings
-  var min = 0,
-      max = 100,
-      step = 1,
+  var step = 1,
       animate = true,
       orientation = "horizontal",
       axis = false,
@@ -26,7 +24,7 @@ d3.slider = function module() {
       tickFormat = d3.format(".0"),
       sliderLength;
 
-  function slider(selection) {
+    function slider(selection) {
     selection.each(function() {
 
       // Create scale if not defined by user
