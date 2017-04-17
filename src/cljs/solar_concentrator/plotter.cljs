@@ -4,7 +4,7 @@
 (def width (- 460 (margin :left) (margin :right)))
 (def height (- 300 (margin :top) (margin :bottom)))
 (def plot-range {:x #js [0 width] :y #js [height 0]})
-
+(def plot-color "blue")
 
 (defn add-axis-labels!
   [element label-x label-y]
@@ -83,6 +83,7 @@
         (.append "svg:circle")
         (.attr "cx" (fn [d i] (x (d 0))))
         (.attr "cy" (fn [d i] (y (max 0 (d 1)))))
+        (.attr "fill" plot-color)
         (.attr "r" 2))
     (add-axis-labels! main (:x label) (:y label))))
 

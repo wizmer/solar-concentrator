@@ -45,9 +45,7 @@
     ))
 
 (defn on-utc-offset-changed! [coordinates]
-  (println "hello world")
   (let [utc-offset (domina.core/value (by-id "utc-offset-number"))]
-    (println utc-offset)
     (swap! coordinates #(assoc % :utc-offset utc-offset) )
     (recompute-and-refresh-plots! @coordinates)
     ))
@@ -59,17 +57,14 @@
   (swap! coordinates #(assoc % :date (now)) )
 
   (refresh-coordinates! @coordinates)
-  (doseq [[coord-name range]{:latitude [-45 45]
-                             :longitude [-90 90]}]
+  (doseq [[coord-name range]{:latitude [-90 90]
+                             :longitude [-180 180]}]
     (-> js/d3
         (.select (str "#slider_" (name coord-name)))
         (.call (-> js/d3
                    (.slider (range 0) (range 1))
                    (.value 0)
-                   (.axis  (-> (.-svg js/d3)
-                              (.axis)
-                              (.orient "bottom")
-                              (.ticks 7)))
+
                    (.on "slide" (partial on-slide! coordinates coord-name))))))
 
 

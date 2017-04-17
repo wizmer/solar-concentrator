@@ -21,6 +21,7 @@
                  [org.clojars.magomimmo/shoreleave-remote "0.3.1"]
                  [javax.servlet/javax.servlet-api "3.1.0"]
                  [org.clojars.magomimmo/valip "0.4.0-SNAPSHOT"]
+                 [hoplon/hoplon             "6.0.0-alpha17"]
                  [enlive "1.1.6"]
                  [adzerk/boot-test "1.2.0"]
                  [crisptrutski/boot-cljs-test "0.2.1-SNAPSHOT"]
@@ -31,8 +32,8 @@
          '[adzerk.boot-reload :refer [reload]]
          '[adzerk.boot-cljs-repl :refer [cljs-repl start-repl]]
          '[adzerk.boot-test :refer [test]]
+         '[hoplon.boot-hoplon       :refer [hoplon prerender]]
          '[crisptrutski.boot-cljs-test :refer [test-cljs]])
-
 
 (def defaults {:test-dirs #{"test/cljc"}
                :output-to "main.js"
@@ -83,12 +84,21 @@
   "Launch immediate feedback dev environment"
   []
   (comp
-   (serve
-    ;; :handler 'modern-cljs.core/app    ; ring hanlder
-          :resource-root "target"           ; root classpath
-          :reload true)                     ; reload ns
+   (serve :dir "target/templates/main")
    (watch)
+   (hoplon)
    (reload)
    (cljs-repl) ;; before cljs
    (cljs)
+   (target :dir #{"target"})))
+
+(deftask django
+  "Launch immediate feedback dev environment"
+  []
+  (comp
+   (serve :dir "target")
+   (watch)
+   (reload)
+   (cljs-repl) ;; before cljs
+   (cljs :optimizations :advanced)
    (target :dir #{"target"})))

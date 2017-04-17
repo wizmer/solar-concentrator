@@ -1,0 +1,109 @@
+
+
+body {
+    font-family: Verdana,Arial,sans-serif;
+    max-width: 800px;
+    margin: auto;
+    margin-bottom: 80px;
+}
+
+h3 {
+    margin-top: 30px;
+}
+
+
+#container-sliders {
+    display: flex;
+    flex-wrap: wrap;
+}
+.root {
+    /* border: 1px solid; */
+    border-radius: 5px;
+    padding: 50px;
+    box-sizing: border-box;
+    /* background-color: WhiteSmoke; */
+}
+
+.wrapper div {
+		margin: 35px 0;
+}
+
+.wrapper {
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.d3-slider {
+    width: 200px;
+    margin: 20px;
+    margin-bottom: 50px;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.dot {
+    stroke: #000;
+}
+
+.tooltip {
+    position: absolute;
+    width: 200px;
+    height: 28px;
+    pointer-events: none;
+}
+
+
+
+input {
+    margin: 8px;
+    font-size: 18px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.coord_name {
+    font-size: 20px;
+    font-weight: bold;
+    padding-left: 10px;
+    padding-right: 0px;
+    border-right: 0px;
+}
+
+a:visited {
+    color: blue;
+}
+
+/* D3.JS */
+.axis-label {
+    font-size: 20px;
+}
+#container-flex {
+    display: flex;
+}
+
+#container-elevation-plot {
+    /* float: right; */
+}
+
+li {
+    margin-bottom:  20px;
+}
+.first-sentence {
+    line-height: 30px;
+}
+
+.formula {
+    border: 1px solid black;
+    background-color: white;
+    display: block;
+    padding: 10px;
+    margin: 10px;
+    font-family: CMSY10, CMEX10, Symbol, Times;
+    font-size: 1.4em;
+}

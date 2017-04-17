@@ -14,7 +14,7 @@ d3.slider = function module(min, max) {
       orientation = "horizontal",
       axis = false,
       margin = 50,
-      value,
+      value = 0,
       scale;
 
   // Private variables
