@@ -84,21 +84,12 @@
   "Launch immediate feedback dev environment"
   []
   (comp
-   (serve :dir "target/templates/main")
    (watch)
    (hoplon)
    (reload)
    (cljs-repl) ;; before cljs
    (cljs)
+   (serve :dir "target/templates/main")
    (target :dir #{"target"})))
 
-(deftask django
-  "Launch immediate feedback dev environment"
-  []
-  (comp
-   (serve :dir "target")
-   (watch)
-   (reload)
-   (cljs-repl) ;; before cljs
-   (cljs :optimizations :advanced)
-   (target :dir #{"target"})))
+
