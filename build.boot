@@ -1,7 +1,6 @@
 (set-env!
- :source-paths #{ "src/cljs"}
+ :source-paths #{ "src/html" "src/cljs"}
  :resource-paths #{"html"}
-
  :dependencies '[
                  [org.clojure/clojure "1.8.0"]         ;; add CLJ
                  [org.clojure/clojurescript "1.9.473"] ;; add CLJS
@@ -28,10 +27,13 @@
                  ])
 
 (require '[adzerk.boot-cljs :refer [cljs]]
+         '[boot.core          :as    core]
          '[pandeiro.boot-http :refer [serve]]
          '[adzerk.boot-reload :refer [reload]]
+         '[clojure.java.io    :as    io]
          '[adzerk.boot-cljs-repl :refer [cljs-repl start-repl]]
          '[adzerk.boot-test :refer [test]]
+         '[boot.util          :as    util]
          '[hoplon.boot-hoplon       :refer [hoplon prerender]]
          '[crisptrutski.boot-cljs-test :refer [test-cljs]])
 
@@ -39,6 +41,11 @@
                :output-to "main.js"
                :testbed :phantom
                :namespaces '#{solar_concentrator.core}} )
+
+(defn- copy [tf dir]
+  (let [f (core/tmp-file tf)]
+    (util/with-let [to (doto (io/file dir (:path tf)) io/make-parents)]
+      (io/copy f to))))
 
 (deftask add-source-paths
   "Add paths to :source-paths environment variable"
@@ -80,6 +87,29 @@
      (test :namespaces namespaces)
      (target :dir #{"target"}))))
 
+(deftask insert
+  "Inject content in new file"
+  [f file FILE str "FileSet root-relative path of the HTML file to tinker with."
+   c chunk JAVASCRIPT str "JavaScript files to inject as <script> tags in <head>."]
+  (assert (and file (seq chunk)) "inject: file and scripts are required arguments")
+  (let [tgt (core/tmp-dir!)]
+    (core/with-pre-wrap [fs]
+      (core/empty-dir! tgt)
+      (util/info "Injecting %s into %s...\n" chunk file)
+      (if-let [html-file (first (by-path [file] (core/input-files fs)))]
+        (let [f   (copy html-file tgt)
+              txt (slurp f)
+              chunk-file (first (by-path [chunk] (core/input-files fs)))
+              f2   (copy chunk-file tgt)
+              chunk-content (slurp f2)
+              ]
+          (spit f (.replaceFirst txt "container" chunk-content))
+          (-> fs
+              (core/rm [html-file])
+              (core/add-resource tgt)
+              core/commit!))
+        fs))))
+
 (deftask dev
   "Launch immediate feedback dev environment"
   []
@@ -88,8 +118,18 @@
    (hoplon)
    (reload)
    (cljs-repl) ;; before cljs
-   (cljs)
-   (serve :dir "target/templates/main")
+   (cljs :optimizations :none)
+   (insert :file "index.html" :chunk "chunk.html")
+   (target :dir #{"target"})
+   (serve :dir "target")))
+
+(deftask django
+  "Launch immediate feedback dev environment"
+  []
+  (comp
+   (watch)
+   (hoplon)
+   (reload)
+   (cljs :optimizations :advanced)
+   (insert :file "solar.html" :chunk "chunk.html")
    (target :dir #{"target"})))
-
-

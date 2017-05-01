@@ -2,8 +2,7 @@
   (:require [solar-concentrator.sliders :refer [populate]]
             [solar-concentrator.plotter]))
 
-
-(defn main
+(defn my-main
   []
   (enable-console-print!)
   (println "Reloading...")

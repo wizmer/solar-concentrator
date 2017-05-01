@@ -1,7 +1,7 @@
 (ns solar-concentrator.plotter)
 
 (def margin {:top 20 :right 15 :bottom 20 :left 100})
-(def width (- 460 (margin :left) (margin :right)))
+(def width (- 360 (margin :left) (margin :right)))
 (def height (- 300 (margin :top) (margin :bottom)))
 (def plot-range {:x #js [0 width] :y #js [height 0]})
 (def plot-color "blue")

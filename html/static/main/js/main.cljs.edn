@@ -1,3 +1,2 @@
-{:require  [solar-concentrator.core]
- :init-fns [solar-concentrator.core/main]
+{:init-fns [solar-concentrator.core/my-main],
  :compiler-options {:asset-path "static/main/js/main.out"}}

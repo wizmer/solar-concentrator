@@ -11,7 +11,9 @@ h3 {
     margin-top: 30px;
 }
 
-
+.container-multi-plot {
+    display: flex;
+}
 #container-sliders {
     display: flex;
     flex-wrap: wrap;
@@ -83,6 +85,10 @@ a:visited {
 .axis-label {
     font-size: 20px;
 }
+
+.plot {
+    
+}
 #container-flex {
     display: flex;
 }
@@ -104,6 +110,6 @@ li {
     display: block;
     padding: 10px;
     margin: 10px;
-    font-family: CMSY10, CMEX10, Symbol, Times;
+    font-family: Symbol, Times, monospace;
     font-size: 1.4em;
 }
